@@ -1,0 +1,11 @@
+server:
+  port: 8888
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+    consumer:
+      group-id: user-group
+      auto-offset-reset: earliest
+logging:
+  file:
+    name: kafka-message.log
