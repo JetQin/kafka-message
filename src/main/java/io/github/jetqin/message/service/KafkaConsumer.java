@@ -1,25 +1,17 @@
 package io.github.jetqin.message.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class KafkaConsumer {
 
 
-//    @KafkaListener(topics = "test", groupId = "${spring.kafka.consumer.group-id}")
-//    public void processMessage(String message) {
-//        System.out.println("************************************************************************");
-//        System.out.println("Consumer message=[" + message + "]");
-//        System.out.println("************************************************************************");
-//    }
-
-
     @KafkaListener(topics = "test", groupId = "${spring.kafka.consumer.group-id}")
     public void processMessageAtLeastOnce(String message) throws InterruptedException {
-        System.out.println("*************************At Least Once**********************************");
-        System.out.println("Consumer message=[" + message + "]");
-        System.out.println("*************************At Least Once**********************************");
+        log.info("Consumer message=[" + message + "]");
         Thread.sleep(20);
     }
 

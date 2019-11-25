@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +26,19 @@ public class KafkaConsumerConfig {
     private String groupId;
 
     @Bean
-    ConcurrentKafkaListenerContainerFactory<Integer, String>
-    kafkaListenerContainerFactory() {
+    public ThreadPoolTaskExecutor execTaskExecutor() {
+        ThreadPoolTaskExecutor tpte = new ThreadPoolTaskExecutor();
+        tpte.setCorePoolSize(1);
+        return tpte;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Integer, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConcurrency(1);
         factory.setConsumerFactory(consumerFactory());
+        factory.getContainerProperties().setConsumerTaskExecutor(execTaskExecutor());
         return factory;
     }
 
@@ -49,7 +58,8 @@ public class KafkaConsumerConfig {
 
 //      At-most-once Kafka Consumer (Zero or More Deliveries)
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 10);
+//        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_uncommitted");
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 5);
 
 
 

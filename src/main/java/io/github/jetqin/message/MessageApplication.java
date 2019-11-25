@@ -20,8 +20,8 @@ public class MessageApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        for (int index = 0; index < 10000; index++) {
-//            producer.sendMessage("This is user:"+ String.format("%06d",index));
+        for (int index = 0; index < 1000; index++) {
+            producer.sendMessage(String.format("user: %06d, time: %d",index, System.currentTimeMillis()));
         }
     }
 }
